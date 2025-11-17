@@ -1,29 +1,30 @@
 # Contributing to VerifNow Java SDK
 
-Merci de votre intérêt pour contribuer au SDK Java de VerifNow 🎉  
-Les contributions sont bienvenues — corrections, fonctionnalités, documentation, ou retours !
+Thank you for your interest in contributing to the VerifNow Java SDK 🎉  
+Contributions are welcome — bug fixes, features, documentation, or feedback!
 
 ---
 
-## 🧩 Types de contributions acceptées
+## 🧩 Types of contributions accepted
 
-- Corrections de bugs
-- Améliorations de performances
-- Améliorations de documentation
-- Ajouts de tests
-- Suggestions de fonctionnalités
+- Bug fixes
+- Performance improvements
+- Documentation improvements
+- Adding tests
+- Feature suggestions
 
 ---
 
-## 🔧 Prérequis
+## 🔧 Prerequisites
 
 - Java 21+
 - Maven 3.6+
 - Git
-- Un compte GitHub
+- A GitHub account
 
-Cloner le repo :
+Clone the repo:
 
 ```bash
 git clone https://github.com/jfiolleau/verifnow-spring.git
 cd verifnow-spring
+```
