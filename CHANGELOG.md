@@ -6,6 +6,12 @@ and this project follows **[Semantic Versioning](https://semver.org/)**.
 
 ---
 
+## [2.0.1] - 2025-11-20
+### Added
+- SDK version header in API requests for better traceability and monitoring.
+
+---
+
 ## [2.0.0] - 2025-11-16
 ### Added
 - First stable release of the SDK.

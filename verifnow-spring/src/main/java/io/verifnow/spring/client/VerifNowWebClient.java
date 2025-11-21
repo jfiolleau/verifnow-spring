@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2023-2025 Jerome Fiolleau
+ * Copyright (c) 2025-2025 Jerome Fiolleau
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
 public class VerifNowWebClient implements VerifNowClient {
@@ -31,12 +34,19 @@ public class VerifNowWebClient implements VerifNowClient {
   private final WebClient webClient;
   private final ValidationProperties props;
 
+  private static final String SDK_HEADER_NAME = "X-VerifNow-SDK";
+  private static final String SDK_ID = "java";
+  private static final String SDK_VERSION = resolveVersion();
+  private static final String SDK_HEADER_VALUE = SDK_ID + "/" + SDK_VERSION;
+
   public VerifNowWebClient(WebClient.Builder builder, ValidationProperties props) {
     this.props = props;
     WebClient.Builder b = builder.baseUrl(props.getBaseUrl());
     if (props.getApiKey() != null) {
       b.defaultHeader("X-API-KEY", props.getApiKey());
     }
+    // Add SDK identification header to all outgoing calls
+    b.defaultHeader(SDK_HEADER_NAME, SDK_HEADER_VALUE);
     this.webClient = b.build();
   }
 
@@ -93,5 +103,29 @@ public class VerifNowWebClient implements VerifNowClient {
     public String getValue() {
       return value;
     }
+  }
+
+  private static String resolveVersion() {
+    // Prefer Implementation-Version from manifest
+    String impl = VerifNowWebClient.class.getPackage().getImplementationVersion();
+    if (impl != null && !impl.isBlank()) {
+      return impl;
+    }
+    // Fallback to pom.properties if available
+    String pomPath = "/META-INF/maven/io.verifnow/verifnow-spring/pom.properties"; // adjust if group/artifact differ
+    try (InputStream in = VerifNowWebClient.class.getResourceAsStream(pomPath)) {
+      if (in != null) {
+        Properties p = new Properties();
+        p.load(in);
+        String v = p.getProperty("version");
+        if (v != null && !v.isBlank()) {
+          return v;
+        }
+      }
+    } catch (IOException ignored) {
+      // ignore and fallback
+    }
+
+    return null;
   }
 }
